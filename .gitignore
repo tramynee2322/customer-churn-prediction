@@ -15,3 +15,5 @@ Thumbs.db
 # Personal documents (never publish)
 *.docx
 *.pdf
+# ...except the 2023 report, published with teammate names and student IDs redacted
+!docs/2023_university_report.pdf

@@ -115,6 +115,26 @@ Targeting the **top 19%** maximizes expected profit (**+$18,650** on the test se
 **Limitations:** a single public dataset with no time dimension and no revenue data; the ROI section demonstrates
 the method rather than forecasting real returns.
 
+## What changed vs. the 2023 report
+
+This repository re-implements the [2023 university report](docs/2023_university_report.pdf) from scratch on the same
+dataset. Most conclusions hold, but several measurement choices and a few figures were corrected. Every number in this
+README can be reproduced from the notebooks.
+
+| Area | 2023 report | This repo | Why it changed |
+|---|---|---|---|
+| EDA charts | Churner counts, pie chart, correlation heatmap | Churn **rates** by segment, significance tests, activity x products heatmap | Rates show relative risk correctly on imbalanced data (France and Germany have similar churner *counts*, but Germany's *rate* is 2x) |
+| Precision / recall | ~0.9 for most models (appears to be for the non-churn class) | Reported for **churners** | Churners are the class a retention team acts on |
+| ROC in model tables | 0.68-0.80 (appears to be computed from 0/1 predictions) | 0.82-0.87 from **predicted probabilities** | Standard ROC-AUC; the 2023 voting model, measured this way in the report's discussion, also reached 0.86 |
+| Logistic Regression | ~70% accuracy, below the 80% "predict no churn" baseline | 85% accuracy | Numeric features are now scaled inside a pipeline |
+| Features | Dropped tenure, salary and credit card after significance tests | Kept, plus engineered bands and flags | Same statistical conclusion; keeping them costs little and the engineered features lift linear models |
+| Figures | Germany 48% churn; 3-product customers 79% | Germany **32.4%**; 3-product customers **82.7%** | Recomputed directly from the dataset |
+| Business layer | Qualitative recommendations | Threshold tuning, cumulative gains, campaign ROI | Turns risk scores into a targeting decision |
+
+**What stayed the same:** the significance-test conclusions (tenure, salary and credit-card ownership are not linked to
+churn), the churner profile (average age 45 vs. 37 for retained customers, 56% female), the 48% inactive share, and the
+recommendation to use a decision threshold in the 0.2-0.5 range (this repo's tuned threshold is 0.35).
+
 ## Project structure
 
 ```
@@ -131,6 +151,8 @@ customer-churn-prediction/
 │   ├── test_metrics.csv
 │   └── gains_table.csv
 ├── dataset/README.md         # data source and column dictionary (CSV not included)
+├── docs/
+│   └── 2023_university_report.pdf   # original team report (teammate names and student IDs redacted)
 └── requirements.txt
 ```
 
@@ -153,6 +175,13 @@ The full pipeline runs in about 4 minutes on a laptop; all random seeds are fixe
 This project started as a **2023 university team project** (University of Economics and Law, VNU-HCM) comparing
 machine-learning techniques for customer churn, where I worked across EDA, modeling and business recommendations.
 This repository is my **individual re-implementation**, extended with threshold tuning, explainability and the
-retention-targeting and ROI analysis.
+retention-targeting and ROI analysis. See [What changed vs. the 2023 report](#what-changed-vs-the-2023-report) for the
+differences.
+
+## References
+
+- 2023 university team report: *Machine Learning Techniques for Customer Churn: A Comparative Study*, University of
+  Economics and Law, VNU-HCM ([PDF](docs/2023_university_report.pdf); teammates' names and all student IDs are redacted for privacy)
+- Dataset: [Bank Customer Churn Dataset](https://www.kaggle.com/datasets/gauravtopre/bank-customer-churn-dataset), Kaggle
 
 **Le Thi Tra My**, Data Analyst · [LinkedIn](https://www.linkedin.com/in/lttmyt2302/) · [Portfolio](https://tramynee2322.github.io/my-portfolio/)
