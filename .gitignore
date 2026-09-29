@@ -1,0 +1,17 @@
+# Environment
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Raw data is not redistributed; download it from Kaggle (see dataset/README.md)
+dataset/*.csv
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Personal documents (never publish)
+*.docx
+*.pdf
